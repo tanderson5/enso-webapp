@@ -1,33 +1,12 @@
-import { MantineProvider, Container, Title, List, Text, Stack } from '@mantine/core';
+import { MantineProvider, createTheme, Container, Title, Text, Stack, Paper, SegmentedControl, Button } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { useState } from 'react';
+import { CsvUpload } from './components/CsvUpload';
+import { ManualEntry } from './components/ManualEntry';
 
-const items = [
-  "The model will look at PC1 of sea surface temperatures (SST) from the past 18 months",
-  "The model will look at PC1 of ocean heat content (OHC) from the past 18 months",
-  "The model will take these two predictors and use them to make a forecast to predict whether we are heading into an El Niño or La Niña event"
-];
 
-function Header() {
-  return (
-    <Container size="md" py="xl">
-      <Title order={1} ta="center">
-        ENSO Forecast Prediction
-      </Title>
-    </Container>
-  );
-}
 
-function Main({ items }) {
-  return (
-    <Container size="sm">
-      <List spacing="md" size="md" center>
-        {items.map((item, i) => (
-          <List.Item key={i}>{item}</List.Item>
-        ))}
-      </List>
-    </Container>
-  );
-}
+const colorMap = { 'El Niño': 'red', 'La Niña': 'blue', 'Neutral': 'gray' };
 
 function Footer({ year }) {
   return (
@@ -40,13 +19,69 @@ function Footer({ year }) {
 }
 
 function App() {
+  const [mode, setMode] = useState('upload');
+  const [data, setData] = useState(null);
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // async function handleSubmit() {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     setResult(await getForecast(data));
+  //   } catch {
+  //     setError('Forecast failed — please try again.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  function handleModeChange(val) {
+    setMode(val);
+    setData(null);
+    setResult(null);
+  }
+
+  
+
+  
   return (
     <MantineProvider>
-      <Stack gap={0}>
-        <Header />
-        <Main items={items} />
-        <Footer year={new Date().getFullYear()} />
-      </Stack>
+      <Container size="sm" py="xl">
+        <Stack gap="xl">
+          <Stack gap="xs" align="center">
+            <Title order={1}>ENSO Forecast Prediction</Title>
+            <Text c="dimmed" size="sm">Upload a CSV or enter values manually</Text>
+          </Stack>
+
+          <Paper withBorder p="xl" radius="md">
+            <Stack gap="lg">
+              <SegmentedControl
+                color="polyPurple"
+                fullWidth
+                value={mode}
+                onChange={handleModeChange}
+                data={[
+                  { label: 'Upload CSV', value: 'upload' },
+                  { label: 'Enter Manually', value: 'manual' },
+                ]}
+              />
+
+              {mode === 'upload' ? <CsvUpload onChange={setData} /> : <ManualEntry onChange={setData} />}
+
+              <Button color="polyPurple" loading={loading} disabled={!data} fullWidth size="md">
+                Run Forecast
+              </Button>
+
+              {error && <Text c="red" size="sm">{error}</Text>}
+            </Stack>
+          </Paper>
+
+          <Footer year={new Date().getFullYear()} />
+
+        </Stack>
+      </Container>
     </MantineProvider>
   );
 }

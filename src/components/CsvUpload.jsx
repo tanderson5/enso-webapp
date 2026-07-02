@@ -38,7 +38,7 @@ export function CsvUpload({ onChange }) {
 
   return (
     <Stack gap="md">
-      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.7">
+      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
         CSV must have 2 columns: <strong>sst_pc1</strong>, <strong>ohc_pc1</strong>. Expecting 18 rows (18 months).
       </Alert>
 

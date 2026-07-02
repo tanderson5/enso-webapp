@@ -26,14 +26,14 @@ export function ManualEntry({ onChange }) {
       setError(null);
       onChange({ sst_pc1: sstVals, ohc_pc1: ohcVals });
     } else {
-      setError(`Need exactly 18 values each — SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
+      setError(`Need exactly 18 values for each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
       onChange(null);
     }
   }
 
   return (
     <Stack gap="md">
-      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.7">
+      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
         Paste or enter 18 comma-separated monthly values for each predictor<br />(oldest → most recent).
       </Alert>
       <Textarea

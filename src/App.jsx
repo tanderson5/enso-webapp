@@ -1,8 +1,10 @@
-import { MantineProvider, createTheme, Container, Title, Text, Stack, Paper, SegmentedControl, Button } from '@mantine/core';
+import { MantineProvider, createTheme, Container, Title, Text, Stack, Paper, SegmentedControl, Button, Image } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { useState } from 'react';
 import { CsvUpload } from './components/CsvUpload';
 import { ManualEntry } from './components/ManualEntry';
+import { getForecast } from './api/forecast';
+import ExampleForecast from './assets/ExampleForecast.png';
 
 
 
@@ -25,17 +27,17 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // async function handleSubmit() {
-  //   setLoading(true);
-  //   setError(null);
-  //   try {
-  //     setResult(await getForecast(data));
-  //   } catch {
-  //     setError('Forecast failed — please try again.');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  async function handleSubmit() {
+    setLoading(true);
+    setError(null);
+    try {
+      setResult(await getForecast(data));
+    } catch {
+      setError('Forecast failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function handleModeChange(val) {
     setMode(val);
@@ -43,9 +45,6 @@ function App() {
     setResult(null);
   }
 
-  
-
-  
   return (
     <MantineProvider>
       <Container size="sm" py="xl">
@@ -70,13 +69,31 @@ function App() {
 
               {mode === 'upload' ? <CsvUpload onChange={setData} /> : <ManualEntry onChange={setData} />}
 
-              <Button color="polyPurple" loading={loading} disabled={!data} fullWidth size="md">
+              <Button onClick={handleSubmit} color="polyPurple" loading={loading} disabled={!data} fullWidth size="md">
                 Run Forecast
               </Button>
 
               {error && <Text c="red" size="sm">{error}</Text>}
             </Stack>
           </Paper>
+
+          {result && (
+            <Paper withBorder radius="md" overflow="hidden">
+              <Stack gap={0}>
+                <Image
+                  src={ExampleForecast}
+                  alt="Forecast output"
+                  radius="md"
+                />
+                <Stack align="center" gap="xs" p="lg">
+                  <Text size="sm" c="dimmed" fw={500}>Forecast Result</Text>
+                  <Text size="xl" fw={800} c={colorMap[result.prediction]}>
+                    {result.prediction}
+                  </Text>
+                </Stack>
+              </Stack>
+            </Paper>
+          )}
 
           <Footer year={new Date().getFullYear()} />
 

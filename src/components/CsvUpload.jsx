@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Group, Stack, Text, Paper, Table, Alert } from '@mantine/core';
+import { Group, Stack, Text, Paper, Table, Alert, Anchor } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconUpload, IconFile, IconX, IconInfoCircle } from '@tabler/icons-react';
 import '@mantine/dropzone/styles.css';
@@ -8,8 +8,13 @@ import Papa from 'papaparse';
 export function CsvUpload({ onChange }) {
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+  const [filename, setFilename] = useState(null);
+
 
   function handleDrop(files) {
+    setExpanded(false);
+    setFilename(files[0].name);
     Papa.parse(files[0], {
       header: true,
       dynamicTyping: true,
@@ -29,7 +34,7 @@ export function CsvUpload({ onChange }) {
         const ohc = allOhc.slice(-18);
 
         setError(null);
-        setPreview(rows.slice(-18, -13));
+        setPreview(rows.slice(-18));
         onChange({ sst_pc1: sst, ohc_pc1: ohc });
       },
       error: () => {
@@ -61,7 +66,7 @@ export function CsvUpload({ onChange }) {
 
       {preview && (
         <Paper withBorder p="md" radius="sm">
-          <Text size="sm" fw={600} mb="xs">Preview (Only latest 18 months used)</Text>
+          <Text size="sm" fw={600} mb="xs">{filename} (Only latest 18 months used)</Text>
           <Table size="sm">
             <Table.Thead>
               <Table.Tr>
@@ -70,15 +75,21 @@ export function CsvUpload({ onChange }) {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {preview.map((row, i) => (
+              {(expanded ? preview : preview.slice(0, 5)).map((row, i) => (
                 <Table.Tr key={i}>
                   <Table.Td>{row.sst_pc1}</Table.Td>
                   <Table.Td>{row.ohc_pc1}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
+            <Table.Caption>
+              <Group justify="space-between">
+                <Anchor size="xs" onClick={() => setExpanded((e) => !e)}>
+                  {expanded ? 'Show less' : `Show all 18 rows`}
+                </Anchor>
+              </Group>
+            </Table.Caption>
           </Table>
-          <Text size="xs" c="dimmed" mt="xs">…and 13 more rows</Text>
         </Paper>
       )}
     </Stack>

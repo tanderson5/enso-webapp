@@ -43,6 +43,7 @@ function App() {
     setMode(val);
     setData(null);
     setResult(null);
+    setFilename(null);
   }
 
   return (
@@ -51,7 +52,7 @@ function App() {
         <Stack gap="xl">
           <Stack gap="xs" align="center">
             <Title order={1}>ENSO Forecast Prediction</Title>
-            <Text c="dimmed" size="sm">Upload a CSV or enter values manually</Text>
+            <Text c="dimmed" size="sm">Upload a CSV file or enter values manually</Text>
           </Stack>
 
           <Paper withBorder p="xl" radius="md">

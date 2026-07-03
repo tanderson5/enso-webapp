@@ -15,18 +15,21 @@ export function CsvUpload({ onChange }) {
       dynamicTyping: true,
       skipEmptyLines: true,
       complete: ({ data: rows }) => {
-        const sst = rows.map((r) => r.sst_pc1).filter((v) => v != null);
-        const ohc = rows.map((r) => r.ohc_pc1).filter((v) => v != null);
+        const allSst = rows.map((r) => r.sst_pc1).filter((v) => v != null);
+        const allOhc = rows.map((r) => r.ohc_pc1).filter((v) => v != null);
 
-        if (sst.length !== 18 || ohc.length !== 18) {
-          setError(`Expected 18 rows with columns: sst_pc1, ohc_pc1. Got ${rows.length} rows.`);
+        if (allSst.length < 18 || allOhc.length < 18) {
+          setError(`Expected at least 18 rows with columns: sst_pc1, ohc_pc1. Got ${rows.length} rows, ${Object.keys(rows[0]).length} columns`);
           setPreview(null);
           onChange(null);
           return;
         }
 
+        const sst = allSst.slice(-18);
+        const ohc = allOhc.slice(-18);
+
         setError(null);
-        setPreview(rows.slice(0, 5));
+        setPreview(rows.slice(-18, -13));
         onChange({ sst_pc1: sst, ohc_pc1: ohc });
       },
       error: () => {
@@ -39,7 +42,7 @@ export function CsvUpload({ onChange }) {
   return (
     <Stack gap="md">
       <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
-        CSV must have 2 columns: <strong>sst_pc1</strong>, <strong>ohc_pc1</strong>. Expecting 18 rows (18 months).
+        CSV must have 2 columns: <strong>sst_pc1</strong>, <strong>ohc_pc1</strong>. Expecting at least 18 rows (18 months).
       </Alert>
 
       <Dropzone onDrop={handleDrop} accept={[MIME_TYPES.csv]} maxFiles={1}>
@@ -58,7 +61,7 @@ export function CsvUpload({ onChange }) {
 
       {preview && (
         <Paper withBorder p="md" radius="sm">
-          <Text size="sm" fw={600} mb="xs">Preview (first 5 rows)</Text>
+          <Text size="sm" fw={600} mb="xs">Preview (Only latest 18 months used)</Text>
           <Table size="sm">
             <Table.Thead>
               <Table.Tr>

@@ -26,7 +26,7 @@ export function ManualEntry({ onChange }) {
       setError(null);
       onChange({ sst_pc1: sstVals, ohc_pc1: ohcVals });
     } else {
-      setError(`Need exactly 18 values for each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
+      setError(`Need exactly 18 values (18 months) for each predictor. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
       onChange(null);
     }
   }

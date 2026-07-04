@@ -5,8 +5,8 @@ The model will take in input of the PC1 of sea surface temperatures (SST) and th
 
 ![Forecast Example](src/assets/ExampleForecast.png)
 
-## Instructions to run locally
+## Instructions to run front end locally
 1. Make sure Node.js is installed
-2. Run `npm install` inside the project folder
+2. Run `npm install` inside the frontend folder
 3. Start the web app with `npm run dev`
 4. Open http://localhost:5173

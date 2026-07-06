@@ -1,7 +1,7 @@
 import { MantineProvider, createTheme, Container, Title, Text, Stack, Paper, SegmentedControl, Button, Image } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { useState } from 'react';
-import { CsvUpload } from './components/CsvUpload';
+import { FileUpload } from './components/FileUpload';
 import { ManualEntry } from './components/ManualEntry';
 import { getForecast } from './api/forecast';
 import ExampleForecast from './assets/ExampleForecast.png';
@@ -43,7 +43,6 @@ function App() {
     setMode(val);
     setData(null);
     setResult(null);
-    setFilename(null);
   }
 
   return (
@@ -52,7 +51,7 @@ function App() {
         <Stack gap="xl">
           <Stack gap="xs" align="center">
             <Title order={1}>ENSO Forecast Prediction</Title>
-            <Text c="dimmed" size="sm">Upload a CSV file or enter values manually</Text>
+            <Text c="dimmed" size="sm">Upload data files or enter values manually</Text>
           </Stack>
 
           <Paper withBorder p="xl" radius="md">
@@ -63,12 +62,12 @@ function App() {
                 value={mode}
                 onChange={handleModeChange}
                 data={[
-                  { label: 'Upload CSV', value: 'upload' },
+                  { label: 'Upload files', value: 'upload' },
                   { label: 'Enter Manually', value: 'manual' },
                 ]}
               />
 
-              {mode === 'upload' ? <CsvUpload onChange={setData} /> : <ManualEntry onChange={setData} />}
+              {mode === 'upload' ? <FileUpload onChange={setData} /> : <ManualEntry onChange={setData} />}
 
               <Button onClick={handleSubmit} color="polyPurple" loading={loading} disabled={!data} fullWidth size="md">
                 Run Forecast

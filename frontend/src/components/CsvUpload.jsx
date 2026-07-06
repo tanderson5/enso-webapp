@@ -47,7 +47,8 @@ export function CsvUpload({ onChange }) {
   return (
     <Stack gap="md">
       <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
-        CSV must have 2 columns: <strong>sst_pc1</strong>, <strong>ohc_pc1</strong>. Expecting at least 18 rows (18 months).
+        CSV must have a header row with PC columns such as <strong>PC1, PC2, ...</strong> 
+        <br></br>Expecting at least 18 rows of data (18 months).
       </Alert>
 
       <Dropzone onDrop={handleDrop} accept={[MIME_TYPES.csv]} maxFiles={1}>

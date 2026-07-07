@@ -5,8 +5,13 @@ The model will take in input of the PC1 of sea surface temperatures (SST) and th
 
 ![Forecast Example](frontend/src/assets/ExampleForecast.png)
 
-## Instructions to run front end locally
+## Instructions to run frontend locally
 1. Make sure Node.js is installed
 2. Run `npm install` inside the frontend folder
 3. Start the web app with `npm run dev`
 4. Open http://localhost:5173
+
+## Instructions to run backend locally
+1. Move into the backend folder
+2. Run `pip install -r requirements.txt`
+3. Run `uvicorn main:app --reload`

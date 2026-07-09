@@ -6,10 +6,6 @@ import { ManualEntry } from './components/ManualEntry';
 import { getForecast } from './api/forecast';
 import ExampleForecast from './assets/ExampleForecast.png';
 
-
-
-const colorMap = { 'El Niño': 'red', 'La Niña': 'blue', 'Neutral': 'gray' };
-
 function Footer({ year }) {
   return (
     <Container size="md" py="xl">
@@ -80,16 +76,11 @@ function App() {
           {result && (
             <Paper withBorder radius="md" overflow="hidden">
               <Stack gap={0}>
-                <Image
-                  src={ExampleForecast}
-                  alt="Forecast output"
-                  radius="md"
-                />
                 <Stack align="center" gap="xs" p="lg">
                   <Text size="sm" c="dimmed" fw={500}>Forecast Result</Text>
-                  <Text size="xl" fw={800} c={colorMap[result.prediction]}>
-                    {result.prediction}
-                  </Text>
+                  <pre style={{ fontSize: 12, whiteSpace: 'pre-wrap'}}>
+                    {JSON.stringify(result, null, 2)}
+                  </pre>
                 </Stack>
               </Stack>
             </Paper>

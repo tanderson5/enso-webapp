@@ -51,7 +51,7 @@ def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
             len(common),
         )
 
-    # no time columns — zip together and filter positionally
+    # no time columns - zip together and filter positionally
     pairs = [
         (s, o) for s, o in zip(sst_pc1.tolist(), ohc_pc1.tolist())
         if not math.isnan(s) and not math.isnan(o)
@@ -101,7 +101,8 @@ class ForecastInput(BaseModel):
     sst_pc1: list[float]
     ohc_pc1: list[float]
 
+from model import run_forecast
+
 @app.post("/forecast")
 async def forecast(data: ForecastInput):
-    # model inference goes here
-    return {"lead_times": list(range(1, 25)), "predictions": [0.0] * 24}
+    return run_forecast(data.sst_pc1, data.ohc_pc1)

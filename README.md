@@ -13,5 +13,6 @@ The model will take in input of the PC1 of sea surface temperatures (SST) and th
 
 ## Instructions to run backend locally
 1. Move into the backend folder
-2. Run `pip install -r requirements.txt`
-3. Run `uvicorn main:app --reload`
+2. It is recommended to use a venv
+3. Run `pip install -r requirements.txt`
+4. Run `uvicorn main:app --reload`

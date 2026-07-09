@@ -28,9 +28,9 @@ export function DataPreview({ data }) {
           <Table.Tbody>
             {sst_pc1.map((sst, i) => (
               <Table.Tr key={i}>
-                <Table.Td>{i + 1}</Table.Td>
-                <Table.Td>{sst != null ? sst.toFixed(4) : '—'}</Table.Td>
-                <Table.Td>{ohc_pc1[i] != null ? ohc_pc1[i].toFixed(4) : '—'}</Table.Td>
+                <Table.Td>{i == 17 ? i + 1 + ' (Most Recent)' : i + 1}</Table.Td>
+                <Table.Td>{sst != null ? sst.toFixed(4) : 'N/A'}</Table.Td>
+                <Table.Td>{ohc_pc1[i] != null ? ohc_pc1[i].toFixed(4) : 'N/A'}</Table.Td>
               </Table.Tr>
             ))}
           </Table.Tbody>

@@ -1,7 +1,11 @@
 # ENSO Forecast Prediction Web App
-The goal of this web application will be to take in use provided data and run it through a set model.
+This web application provides a user-friendly interface for generating El Niño–Southern Oscillation (ENSO) forecasts using a pretrained deep learning model.
 
-The model will take in input of the PC1 of sea surface temperatures (SST) and the PC1 of ocean heat content (OHC) from the past 18 months. The model will take these two predictors and use them to make a forecast to predict whether we are heading into an El Niño or La Niña event. The forecast will then be displayed back to the user as shown below:
+The application accepts user-provided climate data consisting of the principal components (PC1) of sea surface temperature (SST) and ocean heat content (OHC) from the most recent 18 months. These inputs are processed by the forecasting model, which predicts the next 24 months of SST PC1 values.
+
+The resulting forecast is visualized through an interactive chart that displays predicted SST anomalies and highlights potential transitions toward El Niño or La Niña events based on established climate thresholds.
+
+An example forecast is shown below:
 
 ![Forecast Example](images/RealForecast.png)
 

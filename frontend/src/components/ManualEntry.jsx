@@ -1,58 +1,97 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Stack, Textarea, Text, Alert } from '@mantine/core';
+import { MonthPickerInput } from '@mantine/dates';
 import { IconInfoCircle } from '@tabler/icons-react';
+import '@mantine/dates/styles.css';
 
 function parseVals(str) {
-  return str.split(',').map((v) => parseFloat(v.trim())).filter((v) => !isNaN(v));
+  return str
+    .trim()
+    .split(/[\s,]+/) 
+    .map((v) => parseFloat(v.trim()))
+    .filter((v) => !isNaN(v));
+}
+
+import dayjs from 'dayjs';
+
+function dateToDecimalYear(date) {
+  if (!date) return null;
+  const year = dayjs(date).year();
+  const month = dayjs(date).month(); 
+  return year + (month) / 12;
 }
 
 export function ManualEntry({ onChange }) {
   const [sst, setSst] = useState('');
   const [ohc, setOhc] = useState('');
+  const [endDate, setEndDate] = useState(null);
   const [error, setError] = useState(null);
 
-  function handleChange(field, value) {
-    const newSst = field === 'sst' ? value : sst;
-    const newOhc = field === 'ohc' ? value : ohc;
-    if (field === 'sst') setSst(value);
-    if (field === 'ohc') setOhc(value);
+  useEffect(() => {
+    const sstVals = parseVals(sst);
+    const ohcVals = parseVals(ohc);
 
-    if (!newSst && !newOhc) { onChange(null); setError(null); return; }
-
-    const sstVals = parseVals(newSst);
-    const ohcVals = parseVals(newOhc);
-
-    if (sstVals.length === 18 && ohcVals.length === 18) {
+    if (!sst && !ohc) {
+      onChange(null);
       setError(null);
-      onChange({ sst_pc1: sstVals, ohc_pc1: ohcVals });
+      return;
+    }
+
+    if (sstVals.length >= 18 && ohcVals.length >= 18) {
+      const sst18 = sstVals.slice(-18);
+      const ohc18 = ohcVals.slice(-18);
+
+      let times = null;
+      if (endDate) {
+        const endDecimal = dateToDecimalYear(endDate);
+        const endMonthAbs = Math.floor(endDecimal) * 12 + Math.round((endDecimal - Math.floor(endDecimal)) * 12);
+        times = Array.from({ length: 18 }, (_, i) => {
+          const absMonth = endMonthAbs - (17 - i);
+          return Math.floor(absMonth / 12) + (absMonth % 12) / 12;
+        });
+      }
+
+      setError(null);
+      onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times });
     } else {
-      setError(`Need exactly 18 values (18 months) for each predictor. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
+      setError(`Need at least 18 values each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
       onChange(null);
     }
-  }
+  }, [sst, ohc, endDate]);
 
   return (
     <Stack gap="md">
-      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
+      <Alert icon={<IconInfoCircle size={16} />} color="myPurple" variant="light">
         Paste or enter 18 comma-separated monthly values for each predictor<br />(oldest → most recent).
       </Alert>
+
+      <MonthPickerInput
+        label="Last month of input data"
+        description="Select the month and year of your most recent data, if available"
+        placeholder="e.g. July 2021"
+        value={endDate}
+        onChange={setEndDate}
+        maxDate={new Date()}
+        clearable
+      />
+
       <Textarea
         label="SST PC1 values"
-        description="18 monthly values, comma-separated"
+        description="At least 18 monthly values, comma-separated"
         placeholder="-0.42, 0.13, 0.87, ..."
         autosize
         minRows={2}
         value={sst}
-        onChange={(e) => handleChange('sst', e.target.value)}
+        onChange={(e) => setSst(e.target.value)}
       />
       <Textarea
         label="OHC PC1 values"
-        description="18 monthly values, comma-separated"
+        description="At least 18 monthly values, comma-separated"
         placeholder="-0.31, 0.05, 0.72, ..."
         autosize
         minRows={2}
         value={ohc}
-        onChange={(e) => handleChange('ohc', e.target.value)}
+        onChange={(e) => setOhc(e.target.value)}
       />
       {error && <Text size="sm" c="red">{error}</Text>}
     </Stack>

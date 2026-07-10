@@ -6,6 +6,7 @@ import {
   YAxis,
   Tooltip,
   ReferenceLine,
+  Legend,
 } from "recharts";
 import { Paper, Stack, Text } from "@mantine/core";
 
@@ -209,6 +210,9 @@ export function ForecastChart({ result, historical, times }) {
               connectNulls={false}
               name="prediction"
             />
+
+            <Legend />
+
           </LineChart>
         </ResponsiveContainer>
       </Stack>

@@ -37,7 +37,7 @@ export function ManualEntry({ onChange }) {
       return;
     }
 
-    if (sstVals.length >= 18 && ohcVals.length >= 18) {
+    if (sstVals.length == 18 && ohcVals.length == 18) {
       const sst18 = sstVals.slice(-18);
       const ohc18 = ohcVals.slice(-18);
 
@@ -54,7 +54,7 @@ export function ManualEntry({ onChange }) {
       setError(null);
       onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times });
     } else {
-      setError(`Need at least 18 values each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
+      setError(`Need exactly 18 values each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
       onChange(null);
     }
   }, [sst, ohc, endDate]);
@@ -66,7 +66,7 @@ export function ManualEntry({ onChange }) {
       </Alert>
       <Textarea
         label="SST PC1 values"
-        description="At least 18 monthly values, comma-separated"
+        description="Exactly 18 monthly values, comma-separated"
         placeholder="-0.42, 0.13, 0.87, ..."
         autosize
         minRows={2}
@@ -75,7 +75,7 @@ export function ManualEntry({ onChange }) {
       />
       <Textarea
         label="OHC PC1 values"
-        description="At least 18 monthly values, comma-separated"
+        description="Exactly 18 monthly values, comma-separated"
         placeholder="-0.31, 0.05, 0.72, ..."
         autosize
         minRows={2}

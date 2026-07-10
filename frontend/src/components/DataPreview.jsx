@@ -31,7 +31,7 @@ export function DataPreview({ data }) {
     <Paper withBorder p="md" radius="sm">
       <Stack gap="md">
         <Group justify="space-between" align="flex-start">
-          <Text fw={600} size="sm">Latest 18 months non-null PC1 values. <strong>Confirm before running</strong></Text>
+          <Text fw={600} size="sm">Latest 18 months of non-null PC1 values. <strong>Confirm before running</strong></Text>
           <Stack gap={4} align="flex-end">
             <Badge size="sm">SST: {sst_total_rows} total rows</Badge>
             <Badge size="sm">OHC: {ohc_total_rows} total rows</Badge>

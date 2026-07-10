@@ -7,7 +7,7 @@ The resulting forecast is visualized through an interactive chart that displays 
 
 An example forecast is shown below:
 
-![Forecast Example](images/RealForecast.png)
+![Forecast Example](images/UpdatedRealForecast.png)
 
 ## Instructions to run frontend locally
 1. Make sure Node.js is installed

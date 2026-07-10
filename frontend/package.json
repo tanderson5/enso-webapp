@@ -16,7 +16,8 @@
     "@mantine/hooks": "^9.4.1",
     "@tabler/icons-react": "^3.44.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "recharts": "^3.9.2"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

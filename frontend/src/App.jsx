@@ -1,10 +1,11 @@
-import { MantineProvider, createTheme, Container, Title, Text, Stack, Paper, SegmentedControl, Button, Image } from '@mantine/core';
+import { MantineProvider, createTheme, Container, Title, Text, Stack, Paper, SegmentedControl, Button } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { useState } from 'react';
 import { FileUpload } from './components/FileUpload';
 import { ManualEntry } from './components/ManualEntry';
 import { getForecast } from './api/forecast';
-import ExampleForecast from './assets/ExampleForecast.png';
+import { ForecastChart } from './components/ForecastChart';
+
 
 function Footer({ year }) {
   return (
@@ -73,18 +74,7 @@ function App() {
             </Stack>
           </Paper>
 
-          {result && (
-            <Paper withBorder radius="md" overflow="hidden">
-              <Stack gap={0}>
-                <Stack align="center" gap="xs" p="lg">
-                  <Text size="sm" c="dimmed" fw={500}>Forecast Result</Text>
-                  <pre style={{ fontSize: 12, whiteSpace: 'pre-wrap'}}>
-                    {JSON.stringify(result, null, 2)}
-                  </pre>
-                </Stack>
-              </Stack>
-            </Paper>
-          )}
+          {result && <ForecastChart result={result} historical={data.sst_pc1} times={data.times} />}
 
           <Footer year={new Date().getFullYear()} />
 

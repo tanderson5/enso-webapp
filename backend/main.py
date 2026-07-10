@@ -27,47 +27,92 @@ def extract_pc1(cols: dict, label: str):
     return pc1
 
 def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
+    # both have time — align by time
     if sst_time is not None and ohc_time is not None:
         sst_dict = dict(zip(sst_time.tolist(), sst_pc1.tolist()))
         ohc_dict = dict(zip(ohc_time.tolist(), ohc_pc1.tolist()))
-        common = sorted(set(sst_dict) & set(ohc_dict))
 
-        # filter to times where both values are non-null
-        common = [
-            t for t in common
-            if not math.isnan(sst_dict[t]) and not math.isnan(ohc_dict[t])
-        ]
+        all_times = sorted(set(sst_dict) | set(ohc_dict), reverse=True)
 
-        if len(common) < 18:
-            raise HTTPException(400, f"Only {len(common)} overlapping non-null time steps, need at least 18")
+        valid_pairs = []
+        for t in all_times:
+            sst_val = sst_dict.get(t)
+            ohc_val = ohc_dict.get(t)
+            if sst_val is None or ohc_val is None:
+                continue
+            if math.isnan(sst_val) or math.isnan(ohc_val):
+                continue
+            valid_pairs.append((t, sst_val, ohc_val))
+            if len(valid_pairs) == 18:
+                break
 
-        latest = common[-18:]
+        if len(valid_pairs) < 18:
+            raise HTTPException(400, f"Only {len(valid_pairs)} valid overlapping time steps found, need 18")
+
+        valid_pairs.reverse()
         return (
-            [sst_dict[t] for t in latest],
-            [ohc_dict[t] for t in latest],
-            latest,
+            [p[1] for p in valid_pairs],
+            [p[2] for p in valid_pairs],
+            [p[0] for p in valid_pairs],
             len(sst_pc1),
             len(ohc_pc1),
-            len(common),
+            len(valid_pairs),
         )
 
-    # no time columns - zip together and filter positionally
-    pairs = [
-        (s, o) for s, o in zip(sst_pc1.tolist(), ohc_pc1.tolist())
-        if not math.isnan(s) and not math.isnan(o)
-    ]
+    # mixed case — one has time, other doesn't
+    # slice each independently from the end since both end at the same date
+    if sst_time is None and ohc_time is not None:
+        sst_vals = [v for v in sst_pc1.tolist() if not math.isnan(v)]
+        ohc_items = [(t, v) for t, v in zip(ohc_time.tolist(), ohc_pc1.tolist()) if not math.isnan(v)]
 
-    if len(pairs) < 18:
-        raise HTTPException(400, f"Only {len(pairs)} rows with both SST and OHC non-null, need at least 18")
+        if len(sst_vals) < 18 or len(ohc_items) < 18:
+            raise HTTPException(400, f"Need at least 18 valid rows in each file")
 
-    latest = pairs[-18:]
+        sst_18 = sst_vals[-18:]
+        ohc_18 = ohc_items[-18:]
+
+        return (
+            sst_18,
+            [v for _, v in ohc_18],
+            [t for t, _ in ohc_18],
+            len(sst_pc1),
+            len(ohc_pc1),
+            18,
+        )
+
+    if sst_time is not None and ohc_time is None:
+        sst_items = [(t, v) for t, v in zip(sst_time.tolist(), sst_pc1.tolist()) if not math.isnan(v)]
+        ohc_vals = [v for v in ohc_pc1.tolist() if not math.isnan(v)]
+
+        if len(sst_items) < 18 or len(ohc_vals) < 18:
+            raise HTTPException(400, f"Need at least 18 valid rows in each file")
+
+        sst_18 = sst_items[-18:]
+        ohc_18 = ohc_vals[-18:]
+
+        return (
+            [v for _, v in sst_18],
+            ohc_18,
+            [t for t, _ in sst_18],
+            len(sst_pc1),
+            len(ohc_pc1),
+            18,
+        )
+
+    # neither has time — slice last 18 from each independently
+    sst_vals = [v for v in sst_pc1.tolist() if not math.isnan(v)]
+    ohc_vals = [v for v in ohc_pc1.tolist() if not math.isnan(v)]
+
+    if len(sst_vals) < 18 or len(ohc_vals) < 18:
+        raise HTTPException(400, f"Need at least 18 valid rows in each file")
+
     return (
-        [p[0] for p in latest],
-        [p[1] for p in latest],
+        sst_vals[-18:],
+        ohc_vals[-18:],
         None,
         len(sst_pc1),
         len(ohc_pc1),
-        len(pairs),
+        18,
     )
 
 @app.post("/parse")
@@ -91,6 +136,7 @@ async def parse_files(
     return {
         "sst_pc1": clean_floats(sst_18),
         "ohc_pc1": clean_floats(ohc_18),
+        "times": times,   
         "sst_total_rows": sst_total,
         "ohc_total_rows": ohc_total,
         "overlap_rows": overlap,

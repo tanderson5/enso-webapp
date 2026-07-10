@@ -158,7 +158,7 @@ export function ForecastChart({ result, historical, times }) {
             <Tooltip
               formatter={(value, name) => [
                 value.toFixed(4),
-                name === "historical"
+                name === "Observed (18 months)"
                   ? "Observed"
                   : "Forecast",
               ]}
@@ -199,7 +199,7 @@ export function ForecastChart({ result, historical, times }) {
               strokeWidth={2}
               dot={false}
               connectNulls={false}
-              name="historical"
+              name="Observed (18 months)"
             />
 
             <Line
@@ -208,7 +208,7 @@ export function ForecastChart({ result, historical, times }) {
               strokeWidth={2}
               dot={false}
               connectNulls={false}
-              name="prediction"
+              name="Predicted (24 months)"
             />
 
             <Legend />

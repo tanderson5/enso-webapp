@@ -61,20 +61,9 @@ export function ManualEntry({ onChange }) {
 
   return (
     <Stack gap="md">
-      <Alert icon={<IconInfoCircle size={16} />} color="myPurple" variant="light">
+      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
         Paste or enter 18 comma-separated monthly values for each predictor<br />(oldest → most recent).
       </Alert>
-
-      <MonthPickerInput
-        label="Last month of input data"
-        description="Select the month and year of your most recent data, if available"
-        placeholder="e.g. July 2021"
-        value={endDate}
-        onChange={setEndDate}
-        maxDate={new Date()}
-        clearable
-      />
-
       <Textarea
         label="SST PC1 values"
         description="At least 18 monthly values, comma-separated"
@@ -92,6 +81,15 @@ export function ManualEntry({ onChange }) {
         minRows={2}
         value={ohc}
         onChange={(e) => setOhc(e.target.value)}
+      />
+      <MonthPickerInput
+        label="Last month of input data"
+        description="Select the month and year of your most recent data point, if available"
+        placeholder="e.g. July 2021"
+        value={endDate}
+        onChange={setEndDate}
+        maxDate={new Date()}
+        clearable
       />
       {error && <Text size="sm" c="red">{error}</Text>}
     </Stack>

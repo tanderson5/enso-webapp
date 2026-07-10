@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Text, Group, Button, Alert } from '@mantine/core';
+import { Stack, Text, Group, Button, Alert, List } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconInfoCircle, IconUpload, IconFile, IconX } from '@tabler/icons-react';
 import { DataPreview } from './DataPreview';
@@ -67,13 +67,12 @@ export function FileUpload({ onChange }) {
   return (
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
-        Expecting at least 18 rows of non-null data (18 months).
-      </Alert>
-      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
-        CSV files must have a header row with PC columns such as <strong>PC1, PC2, ...</strong>
-      </Alert>
-      <Alert icon={<IconInfoCircle size={16} />} color="polyPurple.8">
-        TXT files must have a time column and be followed by PC columns.
+        <Text size="sm" fw={600} mb={6}>File requirements</Text>
+        <List size="sm" spacing={4}>
+          <List.Item>At least 18 rows of non-null data</List.Item>
+          <List.Item>CSV files must have a header row with PC columns such as <strong>PC1, PC2, ...</strong></List.Item>
+          <List.Item>TXT files must have a time column followed by PC columns</List.Item>
+        </List>
       </Alert>
       <FileDropzone label="SST File" file={sstFile} onChange={handleSstChange} />
       <FileDropzone label="OHC File" file={ohcFile} onChange={handleOhcChange} />

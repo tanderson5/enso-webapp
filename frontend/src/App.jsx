@@ -42,6 +42,11 @@ function App() {
     setResult(null);
   }
 
+  function handleDataChange(newData) {
+    setData(newData);
+    if (!newData) setResult(null);
+  }
+
   return (
     <MantineProvider>
       <Container size="sm" py="xl">
@@ -64,7 +69,7 @@ function App() {
                 ]}
               />
 
-              {mode === 'upload' ? <FileUpload onChange={setData} /> : <ManualEntry onChange={setData} />}
+              {mode === 'upload' ? <FileUpload onChange={handleDataChange} /> : <ManualEntry onChange={handleDataChange} />}
 
               <Button onClick={handleSubmit} color="polyPurple" loading={loading} disabled={!data} fullWidth size="md">
                 Run Forecast

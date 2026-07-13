@@ -122,6 +122,29 @@ export function ForecastChart({ result, historical, times }) {
     );
   }
 
+  function getYAxisConfig(data) {
+    const allValues = data.flatMap((d) => [d.historical, d.prediction]).filter((v) => v != null);
+    const actualMin = Math.min(...allValues);
+    const actualMax = Math.max(...allValues);
+
+    // snap to nearest 0.5, with minimum range of -1 to 1
+    const minTick = Math.min(Math.floor(actualMin / 0.5) * 0.5, -1.0);
+    const maxTick = Math.max(Math.ceil(actualMax / 0.5) * 0.5, 1.0);
+
+    // build ticks array in 0.5 increments
+    const ticks = [];
+    for (let t = minTick; t <= maxTick + 1e-9; t = Math.round((t + 0.5) * 10) / 10) {
+      ticks.push(t);
+    }
+
+    return {
+      domain: [minTick - 0.1, maxTick + 0.1],
+      ticks,
+    };
+  }
+
+  const { domain, ticks } = getYAxisConfig(data);
+
   return (
     <Paper withBorder p="xl" radius="md" width="100%">  
       <Stack gap="md">
@@ -143,8 +166,8 @@ export function ForecastChart({ result, historical, times }) {
             />
 
             <YAxis
-              domain={[-1.6, 1.6]}
-              ticks={[-1.5, -1, -0.5, 0, 0.5, 1, 1.5]}
+              domain={domain}
+              ticks={ticks}
               tick={{ fontSize: 11 }}
               label={{
                 value: "Difference from average temperature (°C)",

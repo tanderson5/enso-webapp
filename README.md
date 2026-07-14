@@ -5,9 +5,11 @@ The application accepts user-provided climate data consisting of the principal c
 
 The resulting forecast is visualized through an interactive chart that displays predicted SST anomalies and highlights potential transitions toward El Niño or La Niña events based on established climate thresholds.
 
-An example forecast is shown below:
+Example forecasts are shown below:
 
-![Forecast Example](images/UpdatedRealForecast.png)
+![2021 Data Forecast](images/RawDataForecast.png)
+
+![Recent 2026 Data Forecast](images/RecentForecast.png)
 
 ## Instructions to run frontend locally
 1. Make sure Node.js is installed

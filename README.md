@@ -9,7 +9,7 @@ The web app takes user-provided climate data, specifically the first principal c
 
 Data can be provided in two ways:
 
-**File Upload:** Upload separate SST and OHC data files in CSV or TXT format. After both files are uploaded the 'Grab Latest 18 Months' button extracts PC1 from each file and aligns the most recent 18 months of overlapping non-null data. A preview table is shown before running the forecast.
+**File Upload:** Upload 2 separate SST and OHC data files in CSV or TXT format. After both files are uploaded the 'Grab Latest 18 Months' button extracts PC1 from each file and aligns the most recent 18 months of overlapping non-null data. A preview table is shown before running the forecast.
 
 **Manual Entry:** Paste or type exactly 18 comma-separated monthly values for each predictor. Select the last month of your input data to generate accurate date labels on the forecast chart.
 

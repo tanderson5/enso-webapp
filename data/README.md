@@ -9,7 +9,7 @@ This file contains ocean heat content (OHC) data from June 1958 to June 2021. Th
 This file contains sea surface temperature (SST) data. It contains 10 PC columns from PC1 to PC10. It is assumed that both of these data files end with June 2021. Therefore, since this file has 853 rows (months), it is assumed to start in May of 1950. This web app extracts the PC1 content and aligns with the OHC data by matching the latest data in pairs. The time from the OHC data is then used.
 
 ## Manual Entry - June 2026 Data.txt
-**The data in this file should only by used for manual entry and the file should not be uploaded directly to the web application.**
+**The data in this file should only be used for manual entry and the file should not be uploaded directly to the web application.**
 
 This data was extracted from the NOAA datasets listed below:
 - Nino 3.4 ANOM (SST): https://www.cpc.ncep.noaa.gov/data/indices/sstoi.indices

@@ -1,0 +1,43 @@
+Latest 18 months of data - up to June 2026 
+
+FOR MANUAL ENTRY COPY AND PASTE ONLY
+
+*Nino 3.4 ANOM (SST)* https://www.cpc.ncep.noaa.gov/data/indices/sstoi.indices
+-0.71,
+-0.35,
+0.1,
+-0.16,
+-0.04,
+0.04,
+-0.06,
+-0.33,
+-0.44,
+-0.48,
+-0.68,
+-0.61,
+-0.54,
+-0.2,
+0.03,
+0.47,
+0.94,
+1.55
+
+*Central Pacific heat content (OHC)* https://psl.noaa.gov/data/correlation/heatcentra.csv
+-0.900
+-0.530,
+0.040,
+0.250,
+0.340,
+0.310,
+0.050,
+-0.210,
+-0.400,
+-0.290,
+-0.330,
+0.010,
+0.450,
+1.020,
+1.390,
+2.070,
+1.970,
+2.140

@@ -85,7 +85,7 @@ export function ManualEntry({ onChange }) {
       <MonthPickerInput
         label="Last month of input data"
         description="Select the month and year of your most recent data point, if available"
-        placeholder="e.g. July 2021"
+        placeholder="e.g. June 2021"
         value={endDate}
         onChange={setEndDate}
         maxDate={new Date()}

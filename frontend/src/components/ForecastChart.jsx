@@ -18,13 +18,9 @@ const MONTHS = [
 const EL_NINO_THRESHOLD = 0.5;
 const LA_NINA_THRESHOLD = -0.5;
 
-function parseDecimalYear(decimalYear) {
-  const year = Math.floor(decimalYear);
-  const monthIndex = Math.min(
-    Math.round((decimalYear - year) * 12),
-    11
-  );
-
+function parseDecimalYear(decYear) {
+  const year = Math.floor(decYear);
+  const monthIndex = Math.min(Math.floor((decYear - year) * 12), 11);
   return { year, monthIndex };
 }
 

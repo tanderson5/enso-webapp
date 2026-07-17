@@ -7,7 +7,7 @@ const MONTHS = [
 
 function parseDecimalYear(decYear) {
   const year = Math.floor(decYear);
-  const monthIndex = Math.min(Math.round((decYear - year) * 12), 11);
+  const monthIndex = Math.min(Math.floor((decYear - year) * 12), 11);
   return { year, monthIndex };
 }
 

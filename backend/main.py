@@ -27,7 +27,7 @@ def extract_pc1(cols: dict, label: str):
     return pc1
 
 def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
-    # both have time — align by time
+    # if both have time, align by time
     if sst_time is not None and ohc_time is not None:
         sst_dict = dict(zip(sst_time.tolist(), sst_pc1.tolist()))
         ohc_dict = dict(zip(ohc_time.tolist(), ohc_pc1.tolist()))
@@ -59,7 +59,7 @@ def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
             len(valid_pairs),
         )
 
-    # mixed case — one has time, other doesn't
+    # mixed case: one has time, other doesn't
     # slice each independently from the end since both end at the same date
     if sst_time is None and ohc_time is not None:
         sst_vals = [v for v in sst_pc1.tolist() if not math.isnan(v)]
@@ -141,7 +141,6 @@ async def parse_files(
         "ohc_total_rows": ohc_total,
         "overlap_rows": overlap,
     }
-
 
 class ForecastInput(BaseModel):
     sst_pc1: list[float]

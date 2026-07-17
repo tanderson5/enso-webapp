@@ -11,7 +11,11 @@ Data can be provided in two ways:
 
 **File Upload:** Upload 2 separate SST and OHC data files in CSV or TXT format. After both files are uploaded the 'Grab Latest 18 Months' button extracts PC1 from each file and aligns the most recent 18 months of overlapping non-null data. A preview table is shown before running the forecast.
 
+![File Upload](images/UploadFiles.png)
+
 **Manual Entry:** Paste or type exactly 18 comma-separated monthly values for each predictor. Select the last month of your input data to generate accurate date labels on the forecast chart.
+
+![Manual Entry](images/ManualEntry.png)
 
 ## Ouput
 When the 'Run Forecast' button is pressed, these inputs are processed by the forecasting model, which predicts the next 24 months of SST PC1 values.

@@ -15,9 +15,9 @@ def clean_floats(values: list) -> list:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173", 
-        "https://enso-webapp.netlify.app/"
-                   ],
+        "http://localhost:5173",
+        "https://enso-webapp.netlify.app",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -18,7 +18,7 @@ export async function parseFiles({ sstFile, ohcFile }) {
 }
 
 export async function getForecast({ sst_pc1, ohc_pc1 }) {
-  const response = await fetch('http://localhost:8000/forecast', {
+  const response = await fetch(`${API_URL}/forecast`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ sst_pc1, ohc_pc1 }),

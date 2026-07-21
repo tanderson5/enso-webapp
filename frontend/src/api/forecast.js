@@ -5,7 +5,7 @@ export async function parseFiles({ sstFile, ohcFile }) {
   formData.append('sst_file', sstFile);
   formData.append('ohc_file', ohcFile);
 
-  const response = await fetch(`${API_UR}/parse`, {
+  const response = await fetch(`${API_URL}/parse`, {
     method: 'POST',
     body: formData,
   });

@@ -156,6 +156,10 @@ from model import run_forecast
 async def forecast(data: ForecastInput):
     return run_forecast(data.sst_pc1, data.ohc_pc1)
 
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))

@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from file_parser import parse_upload
 import numpy as np
+import os
 
 app = FastAPI()
 
@@ -13,7 +14,10 @@ def clean_floats(values: list) -> list:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173", 
+        "https://enso-webapp.netlify.app/"
+                   ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -151,3 +155,8 @@ from model import run_forecast
 @app.post("/forecast")
 async def forecast(data: ForecastInput):
     return run_forecast(data.sst_pc1, data.ohc_pc1)
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)

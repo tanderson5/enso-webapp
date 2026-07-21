@@ -1,9 +1,11 @@
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export async function parseFiles({ sstFile, ohcFile }) {
   const formData = new FormData();
   formData.append('sst_file', sstFile);
   formData.append('ohc_file', ohcFile);
 
-  const response = await fetch('http://localhost:8000/parse', {
+  const response = await fetch(`${API_UR}/parse`, {
     method: 'POST',
     body: formData,
   });

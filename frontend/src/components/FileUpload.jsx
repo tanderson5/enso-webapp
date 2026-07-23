@@ -72,7 +72,7 @@ export function FileUpload({ onChange }) {
           <List.Item>At least 18 rows of non-null data</List.Item>
           <List.Item>CSV files must have a header row with PC columns (e.g. PC1, PC2), or be in NOAA OHC with a Date column followed by OHC value</List.Item>
           <List.Item>TXT files must have a time column followed by PC columns, or be in NOAA SST format with a NINO3.4 ANOM column </List.Item>
-          <List.Item>Do not mix processed PC files with raw NOAA index files </List.Item>
+          <List.Item>Do not mix processed PC files with NOAA index files </List.Item>
         </List>
       </Alert>
       <FileDropzone label="SST File" file={sstFile} onChange={handleSstChange} />

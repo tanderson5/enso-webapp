@@ -134,7 +134,7 @@ export function FileUpload({ onChange, model_type }) {
       {parsedData && !hasTimesFromFile && (
         <MonthPickerInput
           label="Last month of input data"
-          description="No date column detected — select the most recent month of your data to enable date labels"
+          description="No date column detected. Please select the most recent month of your data to enable date labels"
           placeholder="e.g. June 2021"
           value={anchorDate}
           onChange={handleAnchorDateChange}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Text, Group, Button, Alert, List } from '@mantine/core';
+import { Stack, Text, Group, Button, Alert, List, Code } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconInfoCircle, IconUpload, IconFile, IconX } from '@tabler/icons-react';
 import { DataPreview } from './DataPreview';
@@ -96,9 +96,9 @@ export function FileUpload({ onChange, model_type }) {
         <Text size="sm" fw={600} mb={6}>File requirements</Text>
         <List size="sm" spacing={4}>
           <List.Item>At least 18 rows of non-null data</List.Item>
-          <List.Item>CSV files must have a header row with PC columns (e.g. PC1, PC2), or be in NOAA OHC with a Date column followed by OHC value</List.Item>
-          <List.Item>TXT files must have a time column followed by PC columns, or be in NOAA SST format with a NINO3.4 ANOM column </List.Item>
-          <List.Item>Do not mix processed PC files with NOAA index files </List.Item>
+          <List.Item>CSV files must have a header row with PC columns (e.g. <Code>PC1</Code>, <Code>PC2</Code>), or be in NOAA OHC format with a <Code>Date</Code> column followed by OHC value</List.Item>
+          <List.Item>TXT files must have a time column followed by PC columns, or be in NOAA SST format with an <Code>ANOM</Code> column after a <Code>NINO3.4</Code> column</List.Item>
+          <List.Item>Do not mix processed PC files with NOAA index files</List.Item>
         </List>
       </Alert>
 

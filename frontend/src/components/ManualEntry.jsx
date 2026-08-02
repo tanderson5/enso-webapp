@@ -21,7 +21,7 @@ function dateToDecimalYear(date) {
   return year + (month) / 12;
 }
 
-export function ManualEntry({ onChange }) {
+export function ManualEntry({ onChange, model_type }) {
   const [sst, setSst] = useState('');
   const [ohc, setOhc] = useState('');
   const [endDate, setEndDate] = useState(null);
@@ -35,6 +35,12 @@ export function ManualEntry({ onChange }) {
       onChange(null);
       setError(null);
       return;
+    }
+
+    if (sstVals.length >= 18 && (model_type === 'sst_only' || ohcVals.length >= 18)) {
+      const sst18 = sstVals.slice(-18);
+      const ohc18 = model_type === 'sst_only' ? null : ohcVals.slice(-18);
+      onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times, model_type });
     }
 
     if (sstVals.length == 18 && ohcVals.length == 18) {
@@ -73,15 +79,17 @@ export function ManualEntry({ onChange }) {
         value={sst}
         onChange={(e) => setSst(e.target.value)}
       />
-      <Textarea
-        label="OHC PC1 values"
-        description="Exactly 18 monthly values, comma-separated"
-        placeholder="-0.31, 0.05, 0.72, ..."
-        autosize
-        minRows={2}
-        value={ohc}
-        onChange={(e) => setOhc(e.target.value)}
-      />
+      {model_type === 'sst_ohc' && (
+        <Textarea
+          label="OHC PC1 values"
+          description="Exactly 18 monthly values, comma-separated"
+          placeholder="-0.31, 0.05, 0.72, ..."
+          autosize
+          minRows={2}
+          value={ohc}
+          onChange={(e) => setOhc(e.target.value)}
+        />
+      )}
       <MonthPickerInput
         label="Last month of input data"
         description="Select the month and year of your most recent data point, if available"

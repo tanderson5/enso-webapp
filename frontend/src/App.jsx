@@ -23,13 +23,21 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [model_type, set_model_type] = useState('sst_ohc');
+
+  function handleModelChange(ckpt){
+    set_model_type(ckpt);
+    setData(null);
+    setResult(null);
+  }
 
   async function handleSubmit() {
     setLoading(true);
     setError(null);
     try {
-      setResult(await getForecast(data));
-    } catch {
+      setResult(await getForecast({ ...data, model_type }));;
+    } catch(e) {
+      console.log('Forecast error:', e.message);
       setError('Forecast failed. Please try again.');
     } finally {
       setLoading(false);
@@ -59,6 +67,17 @@ function App() {
           <Paper withBorder p="xl" radius="md">
             <Stack gap="lg">
               <SegmentedControl
+                fullWidth
+                value={model_type}
+                onChange={handleModelChange}
+                color="polyPurple"
+                data={[
+                  { label: 'SST + OHC', value: 'sst_ohc' },
+                  { label: 'SST Only', value: 'sst_only' },
+                ]}
+              />
+
+              <SegmentedControl
                 color="polyPurple"
                 fullWidth
                 value={mode}
@@ -69,7 +88,10 @@ function App() {
                 ]}
               />
 
-              {mode === 'upload' ? <FileUpload onChange={handleDataChange} /> : <ManualEntry onChange={handleDataChange} />}
+              {mode === 'upload'
+                ? <FileUpload key={`upload-${model_type}`} onChange={handleDataChange} model_type={model_type} />
+                : <ManualEntry key={`manual-${model_type}`} onChange={handleDataChange} model_type={model_type} />
+              }
 
               <Button onClick={handleSubmit} color="polyPurple" loading={loading} disabled={!data} fullWidth size="md">
                 Run Forecast

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from file_parser import parse_upload
@@ -10,6 +10,8 @@ app = FastAPI()
 import math
 
 def clean_floats(values: list) -> list:
+    if values is None:
+        return None
     return [None if math.isnan(v) else v for v in values]
 
 app.add_middleware(
@@ -30,7 +32,21 @@ def extract_pc1(cols: dict, label: str):
         raise HTTPException(400, f"{label.upper()} file must contain a PC1 column")
     return pc1
 
-def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
+def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time, model_type = "sst_ohc"):
+    if model_type == "sst_only":
+        sst_vals = [v for v in sst_pc1.tolist() if not math.isnan(v)]
+        if len(sst_vals) < 18:
+            raise HTTPException(400, f"Need at least 18 valid SST rows, got {len(sst_vals)}")
+        times = [t for t in sst_time.tolist() if not math.isnan(t)][-18:] if sst_time is not None else None
+        return (
+            sst_vals[-18:],
+            None,
+            times,
+            len(sst_pc1),
+            None,
+            18,
+        )
+
     # if both have time, align by time
     if sst_time is not None and ohc_time is not None:
         sst_dict = dict(zip(sst_time.tolist(), sst_pc1.tolist()))
@@ -86,7 +102,7 @@ def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
 
     if sst_time is not None and ohc_time is None:
         sst_items = [(t, v) for t, v in zip(sst_time.tolist(), sst_pc1.tolist()) if not math.isnan(v)]
-        ohc_vals = [v for v in ohc_pc1.tolist() if not math.isnan(v)]
+        ohc_vals = [v for v in ohc_pc1.tolist() if not math.isnan(v)] 
 
         if len(sst_items) < 18 or len(ohc_vals) < 18:
             raise HTTPException(400, f"Need at least 18 valid rows in each file")
@@ -122,25 +138,31 @@ def align_and_slice(sst_pc1, sst_time, ohc_pc1, ohc_time):
 @app.post("/parse")
 async def parse_files(
     sst_file: UploadFile = File(...),
-    ohc_file: UploadFile = File(...),
+    ohc_file: UploadFile = File(None),
+    anchor_date: str = Form(None),
+    model_type: str = Form("sst_ohc"),
 ):
     try:
         sst_cols, sst_time = await parse_upload(sst_file)
-        ohc_cols, ohc_time = await parse_upload(ohc_file)
+        ohc_cols, ohc_time = (None, None)
+        if ohc_file and ohc_file.filename:
+            ohc_cols, ohc_time = await parse_upload(ohc_file)
     except ValueError as e:
         raise HTTPException(400, detail=str(e))
 
     sst_pc1 = extract_pc1(sst_cols, "sst")
-    ohc_pc1 = extract_pc1(ohc_cols, "ohc")
+    ohc_pc1 = extract_pc1(ohc_cols, "ohc") if ohc_cols is not None else None
 
     sst_18, ohc_18, times, sst_total, ohc_total, overlap = align_and_slice(
-        sst_pc1, sst_time, ohc_pc1, ohc_time
+        sst_pc1, sst_time, ohc_pc1, ohc_time, model_type
     )
 
     return {
         "sst_pc1": clean_floats(sst_18),
         "ohc_pc1": clean_floats(ohc_18),
-        "times": times,   
+        "times": times,
+        "anchor_date": anchor_date,
+        "model_type": model_type,
         "sst_total_rows": sst_total,
         "ohc_total_rows": ohc_total,
         "overlap_rows": overlap,
@@ -148,13 +170,14 @@ async def parse_files(
 
 class ForecastInput(BaseModel):
     sst_pc1: list[float]
-    ohc_pc1: list[float]
+    ohc_pc1: list[float] | None = None
+    model_type: str = "sst_ohc"
 
 from model import run_forecast
 
 @app.post("/forecast")
 async def forecast(data: ForecastInput):
-    return run_forecast(data.sst_pc1, data.ohc_pc1)
+    return run_forecast(data.sst_pc1, data.ohc_pc1, data.model_type)
 
 @app.get("/health")
 async def health():

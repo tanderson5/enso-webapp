@@ -24,7 +24,7 @@ function generateFullLabels(startDecYear, count) {
 
 export function DataPreview({ data }) {
   const { sst_pc1, ohc_pc1, times, sst_total_rows, ohc_total_rows, overlap_rows } = data;
-
+  const hasOhc = ohc_pc1 != null;
   const labels = times ? generateFullLabels(times[0], sst_pc1.length) : null;
 
   return (
@@ -34,7 +34,7 @@ export function DataPreview({ data }) {
           <Text fw={600} size="sm">Latest 18 months of non-null PC1 values. <strong>Confirm before running</strong></Text>
           <Stack gap={4} align="flex-end">
             <Badge size="sm">SST: {sst_total_rows} total rows</Badge>
-            <Badge size="sm">OHC: {ohc_total_rows} total rows</Badge>
+            {hasOhc && <Badge size="sm">OHC: {ohc_total_rows} total rows</Badge>}
           </Stack>
         </Group>
 
@@ -43,7 +43,7 @@ export function DataPreview({ data }) {
             <Table.Tr>
               <Table.Th>Month</Table.Th>
               <Table.Th>SST PC1</Table.Th>
-              <Table.Th>OHC PC1</Table.Th>
+              {hasOhc && <Table.Th>OHC PC1</Table.Th>}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -51,7 +51,9 @@ export function DataPreview({ data }) {
               <Table.Tr key={i}>
                 <Table.Td>{labels ? labels[i] : i + 1}</Table.Td>
                 <Table.Td>{sst != null ? sst.toFixed(4) : 'N/A'}</Table.Td>
-                <Table.Td>{ohc_pc1[i] != null ? ohc_pc1[i].toFixed(4) : 'N/A'}</Table.Td>
+                {hasOhc && (
+                  <Table.Td>{ohc_pc1[i] != null ? ohc_pc1[i].toFixed(4) : 'N/A'}</Table.Td>
+                )}
               </Table.Tr>
             ))}
           </Table.Tbody>

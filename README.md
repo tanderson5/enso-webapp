@@ -5,24 +5,28 @@ This web application provides a user-friendly interface for generating El Niño�
 
 ## Overview
 
-The web app takes user-provided climate data, specifically the first principal component (PC1) of sea surface temperature (SST) and ocean heat content (OHC) from the most recent 18 months, and produces a 24-month SST PC1 forecast displayed as an interactive chart with El Niño and La Niña thresholds.
+The web app takes user-provided climate data, specifically the first principal component (PC1) of sea surface temperature (SST) and ocean heat content (OHC) from the most recent 18 months, and produces a 24-month SST PC1 forecast displayed as an interactive chart with El Niño and La Niña thresholds. 
+
+The user has the option of switching between model checkpoints. 
+- The default model checkpoint `SST + OHC` uses both SST PC1 and OHC PC1 data. 
+- The `SST Only` model checpoint uses only SST PC1 data.
 
 ## Input Methods
 
 Data can be provided in two ways:
 
-**File Upload:** Upload 2 separate SST and OHC data files in CSV or TXT format. After both files are uploaded the 'Grab Latest 18 Months' button extracts PC1 from each file and aligns the most recent 18 months of overlapping non-null data. A preview table is shown before running the forecast.
+**File Upload:** Upload SST and OHC data files in CSV or TXT format. After the files are uploaded, pressing the `Grab Latest 18 Months` button extracts the PC1 from each file and aligns the most recent 18 months of overlapping non-null data. A preview table is shown before running the forecast. If no data is detected from the files, the option to select latest month of the input data will be provided to enable data labels.
 
 <img src="images/UploadSST+OHC.png" width="325">
 <img src="images/UploadSSTOnly.png" width="325">
 
-**Manual Entry:** Paste or type exactly 18 comma-separated monthly values for each predictor. Select the last month of your input data to generate accurate date labels on the forecast chart.
+**Manual Entry:** Paste or type exactly 18 comma-separated monthly values for each predictor. Select the latest month of the input data to generate accurate date labels on the forecast chart.
 
-![ManualSST+OHC](images/ManualSST+OHC.png)
-![ManualSSTOnly](images/ManualSSTOnly.png)
+<img src="images/ManualSST+OHC.png" width="325">
+<img src="images/ManualSSTOnly.png" width="325">
 
 ## Ouput
-When the 'Run Forecast' button is pressed, these inputs are processed by the forecasting model, which predicts the next 24 months of SST PC1 values.
+When the `Run Forecast` button is pressed, the input data is processed by the forecasting model, which predicts the next 24 months of SST PC1 values.
 
 The resulting forecast is visualized through an interactive chart that displays predicted SST anomalies and highlights potential transitions toward El Niño or La Niña events based on the established thresholds. These thresholds are 0.5° C above and below the average sea surface temperature respectively.
 

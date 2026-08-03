@@ -54,7 +54,7 @@ export function ManualEntry({ onChange, model_type }) {
       setError(null);
       onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times, model_type });
     } else {
-      setError(`Need at least 18 values each — SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
+      setError(`Need exactly 18 values each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
       onChange(null);
     }
   }, [sst, ohc, endDate, model_type]);

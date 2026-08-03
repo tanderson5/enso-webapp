@@ -37,33 +37,27 @@ export function ManualEntry({ onChange, model_type }) {
       return;
     }
 
+    let times = null;
+    if (endDate) {
+      const year = dayjs(endDate).year();
+      const month = dayjs(endDate).month();
+      const endMonthAbs = year * 12 + month;
+      times = Array.from({ length: 18 }, (_, i) => {
+        const abs = endMonthAbs - (17 - i);
+        return Math.floor(abs / 12) + (abs % 12) / 12;
+      });
+    }
+
     if (sstVals.length >= 18 && (model_type === 'sst_only' || ohcVals.length >= 18)) {
       const sst18 = sstVals.slice(-18);
       const ohc18 = model_type === 'sst_only' ? null : ohcVals.slice(-18);
-      onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times, model_type });
-    }
-
-    if (sstVals.length == 18 && ohcVals.length == 18) {
-      const sst18 = sstVals.slice(-18);
-      const ohc18 = ohcVals.slice(-18);
-
-      let times = null;
-      if (endDate) {
-        const endDecimal = dateToDecimalYear(endDate);
-        const endMonthAbs = Math.floor(endDecimal) * 12 + Math.round((endDecimal - Math.floor(endDecimal)) * 12);
-        times = Array.from({ length: 18 }, (_, i) => {
-          const absMonth = endMonthAbs - (17 - i);
-          return Math.floor(absMonth / 12) + (absMonth % 12) / 12;
-        });
-      }
-
       setError(null);
-      onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times });
+      onChange({ sst_pc1: sst18, ohc_pc1: ohc18, times, model_type });
     } else {
-      setError(`Need exactly 18 values each. SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
+      setError(`Need at least 18 values each — SST: ${sstVals.length}/18, OHC: ${ohcVals.length}/18`);
       onChange(null);
     }
-  }, [sst, ohc, endDate]);
+  }, [sst, ohc, endDate, model_type]);
 
   return (
     <Stack gap="md">

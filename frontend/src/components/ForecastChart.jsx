@@ -20,7 +20,10 @@ const LA_NINA_THRESHOLD = -0.5;
 
 function parseDecimalYear(decYear) {
   const year = Math.floor(decYear);
-  const monthIndex = Math.min(Math.floor((decYear - year) * 12), 11);
+  const monthIndex = Math.min(
+    Math.floor((decYear - year) * 12 + 1e-9),
+    11
+  );
   return { year, monthIndex };
 }
 

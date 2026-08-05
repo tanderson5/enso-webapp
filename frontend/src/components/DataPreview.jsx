@@ -7,7 +7,10 @@ const MONTHS = [
 
 function parseDecimalYear(decYear) {
   const year = Math.floor(decYear);
-  const monthIndex = Math.min(Math.floor((decYear - year) * 12), 11);
+  const monthIndex = Math.min(
+    Math.floor((decYear - year) * 12 + 1e-9),
+    11
+  );
   return { year, monthIndex };
 }
 
@@ -25,6 +28,10 @@ function generateFullLabels(startDecYear, count) {
 export function DataPreview({ data }) {
   const { sst_pc1, ohc_pc1, times, sst_total_rows, ohc_total_rows, overlap_rows } = data;
   const hasOhc = ohc_pc1 != null;
+
+  console.log("times[0]:", times[0]);
+  console.log("parsed:", parseDecimalYear(times[0]));
+
   const labels = times ? generateFullLabels(times[0], sst_pc1.length) : null;
 
   return (
